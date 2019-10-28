@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="default" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="VirtualWorld" />
+    <module name="csc203project" />
+    <option name="PROGRAM_PARAMETERS" value="-faster" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
