@@ -40,7 +40,7 @@ public final class ImageStore
                     int r = Integer.parseInt(attrs[KEYED_RED_IDX]);
                     int g = Integer.parseInt(attrs[KEYED_GREEN_IDX]);
                     int b = Integer.parseInt(attrs[KEYED_BLUE_IDX]);
-                    Functions.setAlpha(img, screen.color(r, g, b), 0);
+                    Factory.setAlpha(img, screen.color(r, g, b), 0);
                 }
             }
         }

@@ -3,7 +3,7 @@ import java.util.List;
 
 import processing.core.PImage;
 
-public class MinerNotFull implements Entity, Movable
+public class MinerNotFull implements Movable, Executable
 {
     // Instance Variables.
     private String id;
@@ -133,11 +133,11 @@ public class MinerNotFull implements Entity, Movable
     
     public ActivityAction createActivityAction(WorldModel world, ImageStore imageStore)
     {
-        return new ActivityAction(this, world, imageStore, 0);
+        return new ActivityAction((Executable) this, world, imageStore, 0);
     }
 
     public AnimationAction createAnimationAction(int repeatCount, ImageStore imageStore) {
-        return new AnimationAction(this, null, imageStore,
+        return new AnimationAction((Executable) this, null, imageStore,
                             repeatCount);
     }
     
@@ -148,12 +148,13 @@ public class MinerNotFull implements Entity, Movable
     public void scheduleActions(Entity entity, EventScheduler scheduler,
         WorldModel world, ImageStore imageStore)
     {
-        scheduler.scheduleEvent(entity,
-                        entity.createActivityAction(world, imageStore),
-                        entity.getActionPeriod());
-        scheduler.scheduleEvent(entity,
-                        entity.createAnimationAction(0, imageStore),
-                        entity.getAnimationPeriod());
+        Executable executable = (Executable) entity;        
+        scheduler.scheduleEvent(executable,
+                        executable.createActivityAction(world, imageStore),
+                        executable.getActionPeriod());
+        scheduler.scheduleEvent(executable,
+                        executable.createAnimationAction(0, imageStore),
+                        executable.getAnimationPeriod());
     }
 
     public void addEntity(WorldModel world, Entity entity) {

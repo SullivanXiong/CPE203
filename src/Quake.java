@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.Optional;
 import processing.core.PImage;
 
-public class Quake implements Entity
+public class Quake implements Executable
 {
     // Instance Variables.
     private String id;
@@ -50,11 +50,11 @@ public class Quake implements Entity
     
     public ActivityAction createActivityAction(WorldModel world, ImageStore imageStore)
     {
-        return new ActivityAction(this, world, imageStore, 0);
+        return new ActivityAction((Executable) this, world, imageStore, 0);
     }
 
     public AnimationAction createAnimationAction(int repeatCount, ImageStore imageStore) {
-        return new AnimationAction(this, null, imageStore,
+        return new AnimationAction((Executable) this, null, imageStore,
                             repeatCount);
     }
     
@@ -65,12 +65,13 @@ public class Quake implements Entity
     public void scheduleActions(Entity entity, EventScheduler scheduler,
         WorldModel world, ImageStore imageStore)
     {
-        scheduler.scheduleEvent(entity,
-            entity.createActivityAction(world, imageStore),
-            entity.getActionPeriod());
-        scheduler.scheduleEvent(entity,
-            entity.createAnimationAction(QUAKE_ANIMATION_REPEAT_COUNT, imageStore),
-            entity.getAnimationPeriod());
+        Executable executable = (Executable) entity;
+        scheduler.scheduleEvent(executable,
+            executable.createActivityAction(world, imageStore),
+            executable.getActionPeriod());
+        scheduler.scheduleEvent(executable,
+            executable.createAnimationAction(QUAKE_ANIMATION_REPEAT_COUNT, imageStore),
+            executable.getAnimationPeriod());
     }
 
     public void removeEntity(WorldModel world, Entity entity) {

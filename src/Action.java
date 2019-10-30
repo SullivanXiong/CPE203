@@ -1,6 +1,6 @@
 public interface Action
 {
-    Entity getEntity();
+    Executable getExecutable();
     int getRepeatCount();
 
     void executeAction(EventScheduler scheduler);

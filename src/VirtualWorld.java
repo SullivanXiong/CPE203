@@ -39,6 +39,7 @@ public final class VirtualWorld extends PApplet
     private WorldModel world;
     private WorldView view;
     private EventScheduler scheduler;
+    private Factory factory;
 
     private long nextTime;
 
@@ -54,13 +55,14 @@ public final class VirtualWorld extends PApplet
                 createImageColored(TILE_WIDTH, TILE_HEIGHT,
                                    DEFAULT_IMAGE_COLOR));
         this.world = new WorldModel(WORLD_ROWS, WORLD_COLS,
-                                    createDefaultBackground(imageStore));
+                                    createDefaultBackground(imageStore), factory);
         this.view = new WorldView(VIEW_ROWS, VIEW_COLS, this, world, TILE_WIDTH,
                                   TILE_HEIGHT);
         this.scheduler = new EventScheduler(timeScale);
+        this.factory = new Factory();
 
         loadImages(IMAGE_LIST_FILE_NAME, imageStore, this);
-        loadWorld(world, LOAD_FILE_NAME, imageStore);
+        loadWorld(world, LOAD_FILE_NAME, imageStore, factory);
 
         scheduleActions(world, scheduler, imageStore);
 
@@ -120,7 +122,7 @@ public final class VirtualWorld extends PApplet
     {
         try {
             Scanner in = new Scanner(new File(filename));
-            Functions.loadImages(in, imageStore, screen);
+            Factory.loadImages(in, imageStore, screen);
         }
         catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
@@ -128,11 +130,11 @@ public final class VirtualWorld extends PApplet
     }
 
     public static void loadWorld(
-            WorldModel world, String filename, ImageStore imageStore)
+            WorldModel world, String filename, ImageStore imageStore, Factory factory)
     {
         try {
             Scanner in = new Scanner(new File(filename));
-            world.load(in, imageStore);
+            world.load(in, imageStore, factory);
         }
         catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
@@ -143,7 +145,10 @@ public final class VirtualWorld extends PApplet
             WorldModel world, EventScheduler scheduler, ImageStore imageStore)
     {
         for (Entity entity : world.getEntities()) {
-            entity.scheduleActions(entity, scheduler, world, imageStore);
+            if (entity instanceof Executable) {
+                Executable executable = (Executable) entity;
+                executable.scheduleActions(entity, scheduler, world, imageStore);
+            }
         }
     }
 

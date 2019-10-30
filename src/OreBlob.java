@@ -3,7 +3,7 @@ import java.util.List;
 
 import processing.core.PImage;
 
-public class OreBlob implements Entity, Movable
+public class OreBlob implements Movable, Executable
 {
     // Instance Variables
     private String id;
@@ -52,7 +52,7 @@ public class OreBlob implements Entity, Movable
 
             if (move(this, world, blobTarget.get(), scheduler)) {
                 Entity quake = Factory.createQuake(tgtPos,
-                                           imageStore.getImageList(world.getQUAKE_KEY()));
+                                           imageStore.getImageList(Factory.QUAKE_KEY));
 
                 addEntity(world, quake);
                 nextPeriod += getActionPeriod();
@@ -127,11 +127,11 @@ public class OreBlob implements Entity, Movable
     
     public ActivityAction createActivityAction(WorldModel world, ImageStore imageStore)
     {
-        return new ActivityAction(this, world, imageStore, 0);
+        return new ActivityAction((Executable) this, world, imageStore, 0);
     }
 
     public AnimationAction createAnimationAction(int repeatCount, ImageStore imageStore) {
-        return new AnimationAction(this, null, imageStore,
+        return new AnimationAction((Executable) this, null, imageStore,
                             repeatCount);
     }
     
@@ -142,12 +142,13 @@ public class OreBlob implements Entity, Movable
     public void scheduleActions(Entity entity, EventScheduler scheduler,
         WorldModel world, ImageStore imageStore)
     {
-        scheduler.scheduleEvent(entity,
-            entity.createActivityAction(world, imageStore),
-            entity.getActionPeriod());
-        scheduler.scheduleEvent(entity,
-            entity.createAnimationAction(0, imageStore),
-            entity.getAnimationPeriod());
+        Executable executable = (Executable) entity;
+        scheduler.scheduleEvent(executable,
+            executable.createActivityAction(world, imageStore),
+            executable.getActionPeriod());
+        scheduler.scheduleEvent(executable,
+            executable.createAnimationAction(0, imageStore),
+            executable.getAnimationPeriod());
     }
 
     public void addEntity(WorldModel world, Entity entity) {

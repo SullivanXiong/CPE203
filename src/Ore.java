@@ -3,7 +3,7 @@ import java.util.List;
 
 import processing.core.PImage;
 
-public class Ore implements Entity
+public class Ore implements Executable
 {
     // Instance Variables.
     private String id;
@@ -60,7 +60,7 @@ public class Ore implements Entity
                                     BLOB_ANIMATION_MIN + rand.nextInt(
                                             BLOB_ANIMATION_MAX
                                                     - BLOB_ANIMATION_MIN),
-                                    imageStore.getImageList(world.getBLOB_KEY()));
+                                    imageStore.getImageList(Factory.BLOB_KEY));
 
         this.addEntity(world, blob);
         this.scheduleActions(blob, scheduler, world, imageStore);
@@ -68,11 +68,11 @@ public class Ore implements Entity
     
     public ActivityAction createActivityAction(WorldModel world, ImageStore imageStore)
     {
-        return new ActivityAction(this, world, imageStore, 0);
+        return new ActivityAction((Executable) this, world, imageStore, 0);
     }
 
     public AnimationAction createAnimationAction(int repeatCount, ImageStore imageStore) {
-        return new AnimationAction(this, null, imageStore,
+        return new AnimationAction((Executable) this, null, imageStore,
                             repeatCount);
     }
     
@@ -84,9 +84,13 @@ public class Ore implements Entity
     public void scheduleActions(Entity entity, EventScheduler scheduler,
         WorldModel world, ImageStore imageStore)
     {
-        scheduler.scheduleEvent(entity,
-            entity.createActivityAction(world, imageStore),
-            entity.getActionPeriod());
+        Executable executable = (Executable) entity;
+        scheduler.scheduleEvent(executable,
+            executable.createActivityAction(world, imageStore),
+            executable.getActionPeriod());
+        scheduler.scheduleEvent(executable,
+            executable.createAnimationAction(0, imageStore),
+            executable.getAnimationPeriod());
     }
 
     public void addEntity(WorldModel world, Entity entity) {

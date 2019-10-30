@@ -1,31 +1,31 @@
 public class AnimationAction implements Action
 {
     // Instance variables
-    private Entity entity;
+    private Executable executable;
     private WorldModel world;
     private ImageStore imageStore;
     private int repeatCount;
 
-    public AnimationAction(Entity entity, WorldModel world,
+    public AnimationAction(Executable executable, WorldModel world,
         ImageStore imageStore, int repeatCount)
     {
-        this.entity = entity;
+        this.executable = executable;
         this.world = world;
         this.imageStore = imageStore;
         this.repeatCount = repeatCount;
     }
 
-    public Entity getEntity() { return this.entity;}
+    public Executable getExecutable() { return this.executable;}
     public int getRepeatCount() { return this.repeatCount;}
 
     public void executeAction(EventScheduler scheduler)
     {
-        this.imageStore.nextImage(this.entity);
+        this.imageStore.nextImage(this.executable);
 
         if (this.repeatCount != 1) {
-            scheduler.scheduleEvent(this.entity,
-                          this.entity.createAnimationAction(Math.max(this.repeatCount - 1, 0), this.imageStore),
-                          this.entity.getAnimationPeriod());
+            scheduler.scheduleEvent(this.executable,
+                          this.executable.createAnimationAction(Math.max(this.repeatCount - 1, 0), this.imageStore),
+                          this.executable.getAnimationPeriod());
         }
     }
 }

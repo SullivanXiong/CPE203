@@ -38,27 +38,10 @@ public class Obstacle implements Entity
     public int getResourceLimit() { return this.resourceLimit; }
     public int getResourceCount() { return this.resourceCount; }
     public int getActionPeriod() { return this.actionPeriod; }
-
-    public void executeActivity (WorldModel world,
-    ImageStore imageStore, EventScheduler scheduler) {;}
-
-    public ActivityAction createActivityAction(WorldModel world, ImageStore imageStore)
-    {
-        return new ActivityAction(this, world, imageStore, 0);
-    }
-
-    public AnimationAction createAnimationAction(int repeatCount, ImageStore imageStore) {
-        return new AnimationAction(this, null, imageStore,
-                            repeatCount);
-    }
-    
+  
     public int getAnimationPeriod() {
         return this.animationPeriod;
     }
-
-    public void scheduleActions(Entity entity, EventScheduler scheduler,
-        WorldModel world, ImageStore imageStore)
-    {;}
 
     public void addEntity(WorldModel world, Entity entity) {
         if (world.withinBounds(entity.getPosition())) {
