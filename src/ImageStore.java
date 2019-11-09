@@ -59,8 +59,4 @@ public final class ImageStore
         }
         return imgs;
     }
-
-    public void nextImage(Entity entity) {
-        entity.setImageIndex((entity.getImageIndex() + 1) % entity.getImages().size());
-    }
 }

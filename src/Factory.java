@@ -63,8 +63,7 @@ public class Factory
     public static BlackSmith createBlacksmith(
         String id, Point position, List<PImage> images)
     {
-        return new BlackSmith(id, position, images, 0, 0, 0,
-        0);
+        return new BlackSmith(id, position, images);
     }
 
     public static MinerFull createMinerFull(
@@ -95,15 +94,13 @@ public class Factory
     public static Obstacle createObstacle(
         String id, Point position, List<PImage> images)
     {
-        return new Obstacle(id, position, images, 0, 0, 0,
-            0);
+        return new Obstacle(id, position, images);
     }
 
     public static Ore createOre(
         String id, Point position, int actionPeriod, List<PImage> images)
     {
-        return new Ore(id, position, images, 0, 0,
-            actionPeriod, 0);
+        return new Ore(id, position, images, actionPeriod);
     }
 
     public static OreBlob createOreBlob(
@@ -113,22 +110,19 @@ public class Factory
         int animationPeriod,
         List<PImage> images)
     {
-        return new OreBlob(id, position, images, 0, 0,
-            actionPeriod, animationPeriod);
+        return new OreBlob(id, position, images, actionPeriod, animationPeriod);
     }
 
     public static Quake createQuake(
         Point position, List<PImage> images)
     {
-        return new Quake(QUAKE_ID, position, images, 0, 0,
-            QUAKE_ACTION_PERIOD, QUAKE_ANIMATION_PERIOD);
+        return new Quake(QUAKE_ID, position, images, QUAKE_ACTION_PERIOD, QUAKE_ANIMATION_PERIOD);
     }
 
     public static Vein createVein(
         String id, Point position, int actionPeriod, List<PImage> images)
     {
-        return new Vein(id, position, images, 0, 0,
-            actionPeriod, 0);
+        return new Vein(id, position, images, actionPeriod);
     }
 
     public static void loadImages(Scanner in, ImageStore imageStore, PApplet screen)
@@ -258,6 +252,16 @@ public class Factory
             throw new IllegalArgumentException("position occupied");
         }
 
-        entity.addEntity(world, entity);
+        entity.addEntity(world);
+    }
+
+    public static ActivityAction createActivityAction(ActiveEntity entity, WorldModel world, ImageStore imageStore)
+    {
+        return new ActivityAction(entity, world, imageStore, 0);
+    }
+
+    public static AnimationAction createAnimationAction(AnimatedEntity entity, int repeatCount, ImageStore imageStore) {
+        return new AnimationAction(entity, null, imageStore,
+                            repeatCount);
     }
 }

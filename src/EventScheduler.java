@@ -58,4 +58,15 @@ public final class EventScheduler
             next.getAction().executeAction(this);
         }
     }
+
+    public void unscheduleAllEvents(Entity target)
+    {
+        List<Event> pending = getPendingEvents().remove(target);
+
+        if (pending != null) {
+            for (Event event : pending) {
+                getEventQueue().remove(event);
+            }
+        }
+    }
 }

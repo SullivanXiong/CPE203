@@ -15,20 +15,8 @@ public final class Background
 
     public String getId() { return this.id; }
     public List<PImage> getImages() { return this.images; }
-    public int getImageIndex() { return this.imageIndex; }
 
-    public static PImage getCurrentImage(Object entity) {
-        if (entity instanceof Background) {
-            return ((Background)entity).getImages().get(
-                    ((Background)entity).getImageIndex());
-        }
-        else if (entity instanceof Entity) {
-            return ((Entity)entity).getImages().get(((Entity)entity).getImageIndex());
-        }
-        else {
-            throw new UnsupportedOperationException(
-                    String.format("getCurrentImage not supported for %s",
-                                  entity));
-        }
+    public PImage getCurrentImage() {
+        return this.getImages().get(this.imageIndex);
     }
 }
